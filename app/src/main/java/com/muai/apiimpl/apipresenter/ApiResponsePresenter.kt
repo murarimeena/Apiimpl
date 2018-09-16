@@ -15,6 +15,8 @@ interface ApiResponsePresenter {
 
     fun callApi(call: Call, reqType: String) {
         call.enqueue(object : Callback() {
+            throwable.printStackTrace()
+            iResponseInterface.onResponseFailure("No Internet Connection")
             fun onResponse(response: Response, retrofit: Retrofit) {
                 iResponseInterface.onResponseSuccess(response, reqType)
             }
