@@ -1,37 +1,27 @@
 package com.muai.apiimpl.apipresenter
 
-import android.telecom.Call
-import com.muai.apiimpl.commoninterface.IResponseInterface
-import java.net.ConnectException
-import javax.security.auth.callback.Callback
+import com.muai.apiimpl.commoninterfaces.IRequestInterface
+import com.muai.apiimpl.commoninterfaces.IResponseInterface
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-interface ApiResponsePresenter {
+class ApiResponsePresenter(var iResponseInterface: IResponseInterface) : IRequestInterface {
 
-    var iResponseInterface: IResponseInterface
-
-    fun ApiResponsePresenter(iResponseInterface: IResponseInterface): ??? {
+    init {
         this.iResponseInterface = iResponseInterface
     }
 
-    fun callApi(call: Call, reqType: String) {
-        call.enqueue(object : Callback() {
-            throwable.printStackTrace()
-            iResponseInterface.onResponseFailure("No Internet Connection")
-            fun onResponse(response: Response, retrofit: Retrofit) {
-                iResponseInterface.onResponseSuccess(response, reqType)
-                throwable.printStackTrace()
-                    iResponseInterface.onResponseFailure("Response Failed")
+    override fun <T> callApi(call: Call<T>, reqType: String) {
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>?, response: Response<T>?) {
+                iResponseInterface.onResponseSuccess(call, response!!, reqType)
             }
 
-            fun onFailure(throwable: Throwable) {
-                if (throwable is ConnectException) {
-                    iResponseInterface.onResponseFailure("No Internet Connection")
-                    iResponseInterface.onResponseSuccess(response, reqType)
-                } else {
-                    throwable.printStackTrace()
-                    iResponseInterface.onResponseFailure("Response Failed")
-                }
+            override fun onFailure(call: Call<T>?, t: Throwable?) {
+                iResponseInterface.onResponseFailure(call, t!!, reqType)
             }
         })
     }
+
 }
