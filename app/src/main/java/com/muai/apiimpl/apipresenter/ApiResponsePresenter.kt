@@ -19,11 +19,14 @@ interface ApiResponsePresenter {
             iResponseInterface.onResponseFailure("No Internet Connection")
             fun onResponse(response: Response, retrofit: Retrofit) {
                 iResponseInterface.onResponseSuccess(response, reqType)
+                throwable.printStackTrace()
+                    iResponseInterface.onResponseFailure("Response Failed")
             }
 
             fun onFailure(throwable: Throwable) {
                 if (throwable is ConnectException) {
                     iResponseInterface.onResponseFailure("No Internet Connection")
+                    iResponseInterface.onResponseSuccess(response, reqType)
                 } else {
                     throwable.printStackTrace()
                     iResponseInterface.onResponseFailure("Response Failed")
