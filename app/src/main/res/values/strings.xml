@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Apiimpl</string>
+
+    <!--SPLASH ACTIVITY MESSAGE-->
+    <string name="app_is_loading">App is loading...!!</string>
+</resources>
